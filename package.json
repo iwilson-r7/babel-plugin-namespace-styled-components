@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-namespace-styled-components",
-  "version": "0.4.0",
+  "name": "@iainwilson/babel-plugin-namespace-styled-components",
+  "version": "0.4.1",
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -22,7 +22,6 @@
   "dependencies": {
     "babel-plugin-styled-components": "1.10.0",
     "babel-types": "6.26.0",
-    "deasync": "0.1.14",
     "postcss": "7.0.7",
     "postcss-nested": "4.1.1",
     "postcss-selector-parser": "5.0.0"

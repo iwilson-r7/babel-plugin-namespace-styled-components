@@ -1,5 +1,4 @@
 import postcssNested from 'postcss-nested';
-import { loopWhile } from 'deasync';
 import * as t from 'babel-types';
 import {
   isCSSHelper,
@@ -47,37 +46,19 @@ const taggedTemplateVisitor = (path, state) => {
     .join('');
 
   // Run the string through postcss-nested to "unwrap" any nested style rules
-  let postcssNestedResult;
-  postcssNested
+  let postcssNestedResult = postcssNested
     .process(`& { ${originalStyleString} }`, {
       from: undefined,
       parser: postcssSafeParser,
-    })
-    .then(asyncResult => {
-      postcssNestedResult = asyncResult;
-    })
-    .catch(err => {
-      postcssNestedResult = err;
-    });
-  loopWhile(() => postcssNestedResult == null);
-  if (postcssNestedResult instanceof Error) throw postcssNestedResult;
+    }).stringify();
 
   // Run the string through our namespace plugin to prefix each selector with the given namespace
-  let postcssNamespaceResult;
-  postcssNamespace
+  let postcssNamespaceResult = postcssNamespace
     .process(
       postcssNestedResult.css,
       { from: undefined, parser: postcssSafeParser },
       { namespace }
-    )
-    .then(asyncResult => {
-      postcssNamespaceResult = asyncResult;
-    })
-    .catch(err => {
-      postcssNamespaceResult = err;
-    });
-  loopWhile(() => postcssNamespaceResult == null);
-  if (postcssNamespaceResult instanceof Error) throw postcssNamespaceResult;
+    ).stringify();
 
   // Replace the expression placeholders to form a new, properly namespaced tagged template
   const processedString = postcssNamespaceResult.css;
